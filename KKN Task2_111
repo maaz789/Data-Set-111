@@ -1,0 +1,25 @@
+# MAAZ HUSSAIN 111
+import numpy as np
+from collections import Counter
+training_data = [
+    {'features': (7, 7), 'label': 'Bad'},
+    {'features': (7, 4), 'label': 'Bad'},
+    {'features': (3, 4), 'label': 'Good'},
+    {'features': (1, 4), 'label': 'Good'}
+]
+query_instance = (3, 7)
+k = 3
+distances = []
+for sample in training_data:
+    x1_train, x2_train = sample['features']
+    x1_query, x2_query = query_instance
+    distance = np.sqrt((x1_train - x1_query) ** 2 + (x2_train - x2_query) ** 2)
+    distances.append((distance, sample['label']))
+
+distances.sort(key=lambda x: x[0])
+nearest_neighbors = [label for _, label in distances[:k]]
+majority_class = Counter(nearest_neighbors).most_common(1)[0][0]
+
+print("Distances (sorted):", distances)
+print("Nearest neighbors' classes:", nearest_neighbors)
+print("Predicted class for the query instance (3,7):", majority_class)
