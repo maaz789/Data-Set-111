@@ -1,0 +1,37 @@
+# MAAZ HUSSAIN 111
+from sklearn import preprocessing
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.model_selection import train_test_split
+
+weather = ['Sunny', 'Overcast', 'Rainy', 'Sunny', 'Overcast', 'Rainy']
+temperature = ['Hot', 'Mild', 'Cool', 'Cool', 'Mild', 'Hot']
+play = ['No', 'Yes', 'Yes', 'Yes', 'Yes', 'No']
+le = preprocessing.LabelEncoder()
+weather_encoded = le.fit_transform(weather)
+temperature_encoded = le.fit_transform(temperature)
+play_encoded = le.fit_transform(play)
+
+features = list(zip(weather_encoded, temperature_encoded))
+features_train, features_test, label_train, label_test = train_test_split(
+    features, play_encoded, test_size=0.2, random_state=42
+)
+model = KNeighborsClassifier(n_neighbors=3, metric='euclidean')
+model.fit(features_train, label_train)
+predicted = model.predict(features_test)
+print("Prediction:", predicted)
+conf_mat = confusion_matrix(label_test, predicted)
+print("Confusion Matrix:")
+print(conf_mat)
+accuracy = accuracy_score(label_test, predicted)
+print("Accuracy:", accuracy)
+TP = conf_mat[1][1]
+FP = conf_mat[0][1]
+TN = conf_mat[0][0]
+FN = conf_mat[1][0]d
+print(f"True Positives (TP): {TP}")
+print(f"False Positives (FP): {FP}")
+print(f"True Negatives (TN): {TN}")
+print(f"False Negatives (FN): {FN}")
+calculated_accuracy = (TP + TN) / (TP + TN + FP + FN)
+print("Calculated Accuracy:", calculated_accuracy)
