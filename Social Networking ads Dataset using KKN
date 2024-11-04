@@ -1,0 +1,33 @@
+# MAAZ HUSSAIN 111
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+df = pd.read_csv('Social_Network_Ads.csv')
+X = df[['Age', 'EstimatedSalary']]
+y = df['Purchased']
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+k = 3
+model = KNeighborsClassifier(n_neighbors=k, metric='euclidean')
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print("Predictions:", y_pred)
+conf_mat = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:")
+print(conf_mat)
+
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+tn, fp, fn, tp = conf_mat.ravel()
+print(f"True Positives (TP): {tp}")
+print(f"False Positives (FP): {fp}")
+print(f"True Negatives (TN): {tn}")
+print(f"False Negatives (FN): {fn}")
+calculated_accuracy = (tp + tn) / (tp + tn + fp + fn)
+print("Manually Calculated Accuracy:", calculated_accuracy)
