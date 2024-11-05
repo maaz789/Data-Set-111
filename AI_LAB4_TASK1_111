@@ -1,0 +1,30 @@
+# MAAZ HUSSAIN 111
+from sklearn import preprocessing
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+weather = ['overcast', 'rainy', 'sunny', 'sunny', 'rainy', 'overcast', 'sunny']
+temperature = ['hot', 'hot', 'cold', 'mild', 'cold', 'mild', 'hot']
+play = ['yes', 'yes', 'no', 'yes', 'no', 'no', 'yes']
+
+le = preprocessing.LabelEncoder()
+
+weather_encoded = le.fit_transform(weather)
+temperature_encoded = le.fit_transform(temperature)
+play_encoded = le.fit_transform(play)
+
+features = list(zip(weather_encoded, temperature_encoded, humidity_encoded))
+model = GaussianNB()
+model.fit(features_train, label_train)
+predicted = model.predict(features_test)
+
+print("Predictions:", predicted)
+
+conf_mat = confusion_matrix(label_test, predicted)
+print("Confusion Matrix:")
+print(conf_mat)
+
+accuracy = accuracy_score(label_test, predicted)
+print("Accuracy:", accuracy)
+accuracy = (2 + 2) / (2 + 2 + 0 + 0)
+print("Calculated Accuracy:", accuracy)
