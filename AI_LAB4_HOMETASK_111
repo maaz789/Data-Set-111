@@ -1,0 +1,29 @@
+# MAAZ HUSSAIN 111
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+dataset = pd.read_csv('Social_Network_Ads.csv')
+print(dataset.head())
+le = LabelEncoder()
+dataset['Gender'] = le.fit_transform(dataset['Gender'])
+
+X = dataset[['Age', 'EstimatedSalary']].values
+y = dataset['Purchased'].values
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+model = GaussianNB()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+conf_mat = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:")
+print(conf_mat)
+
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy:.4f}")
