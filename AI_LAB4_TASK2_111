@@ -1,0 +1,33 @@
+# MAAZ HUSSAIN 111
+from sklearn import preprocessing
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+data = {
+    'Age': ['youth', 'youth', 'middle_aged', 'senior', 'middle_aged', 'senior', 'youth', 'middle_aged', 'middle_aged', 'senior', 'youth', 'middle_aged', 'senior', 'middle_aged'],
+    'Income': ['high', 'high', 'high', 'medium', 'low', 'low', 'medium', 'medium', 'high', 'medium', 'high', 'high', 'medium', 'low'],
+    'Student': ['no', 'no', 'yes', 'yes', 'yes', 'no', 'yes', 'no', 'yes', 'yes', 'no', 'yes', 'yes', 'yes'],
+    'Credit_rating': ['fair', 'excellent', 'fair', 'fair', 'fair', 'excellent', 'excellent', 'fair', 'fair', 'excellent', 'excellent', 'fair', 'fair', 'fair'],
+    'Buys_computer': ['no', 'no', 'yes', 'yes', 'yes', 'no', 'yes', 'no', 'yes', 'yes', 'no', 'yes', 'yes', 'yes']
+}
+le = preprocessing.LabelEncoder()
+
+data['Age_encoded'] = le.fit_transform(data['Age'])
+data['Income_encoded'] = le.fit_transform(data['Income'])
+data['Student_encoded'] = le.fit_transform(data['Student'])
+data['Credit_rating_encoded'] = le.fit_transform(data['Credit_rating'])
+data['Buys_computer_encoded'] = le.fit_transform(data['Buys_computer'])
+
+features = list(zip(data['Age_encoded'], data['Income_encoded'], data['Student_encoded'], data['Credit_rating_encoded']))
+labels = data['Buys_computer_encoded']
+
+model = GaussianNB()
+model.fit(features_train, label_train)
+predicted = model.predict(features_test)
+print("Predictions:", predicted)
+
+conf_mat = confusion_matrix(label_test, predicted)
+print("Confusion Matrix:")
+print(conf_mat)
+accuracy = accuracy_score(label_test, predicted)
+print("Accuracy:", accuracy)
