@@ -1,0 +1,34 @@
+import pandas as pd
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.preprocessing import LabelEncoder
+
+data = {
+    'Gender': ['male', 'male', 'male', 'male', 'female', 'female', 'female', 'female'],
+    'Height': [6, 5.92, 5.58, 5.92, 5, 5.5, 5.42, 5.75],
+    'Weight': [180, 190, 170, 165, 100, 150, 130, 150],
+    'Foot_Size': [12, 11, 12, 10, 6, 8, 7, 9]
+}
+labels = ['male', 'male', 'male', 'male', 'female', 'female', 'female', 'female']
+df = pd.DataFrame(data)
+
+label_encoder = LabelEncoder()
+df['Gender'] = label_encoder.fit_transform(df['Gender'])
+
+features = df[['Height', 'Weight', 'Foot_Size']].values
+labels_encoded = df['Gender'].values
+
+classifier = DecisionTreeClassifier()
+classifier.fit(features, labels_encoded)
+new_entry = [[6.00, 180, 12]]
+prediction = classifier.predict(new_entry)
+predicted_label = label_encoder.inverse_transform(prediction)
+print("Prediction for the new entry:", predicted_label[0])
+
+y_pred = classifier.predict(features)
+conf_matrix = confusion_matrix(labels_encoded, y_pred)
+accuracy = accuracy_score(labels_encoded, y_pred)
+
+print("Confusion Matrix:\n", conf_matrix)
+print("Accuracy Score:", accuracy)
