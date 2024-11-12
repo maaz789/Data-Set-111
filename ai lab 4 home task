@@ -1,0 +1,24 @@
+import numpy as np
+import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+data = pd.read_csv("Social_Network_Ads.csv")
+X = data[['Age', 'EstimatedSalary']].values  
+y = data['Purchased'].values                 
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+classifier = DecisionTreeClassifier(random_state=42)
+classifier.fit(X_train, y_train)
+
+y_pred = classifier.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+print("Confusion Matrix:\n", conf_matrix)
+print("Accuracy Score:", accuracy)
+
+new_entry = np.array([[30, 87000]])
+new_prediction = classifier.predict(new_entry)
+print("Prediction for the new entry (Age=30, EstimatedSalary=87000):", "Purchased" if new_prediction[0] == 1 else "Not Purchased")
