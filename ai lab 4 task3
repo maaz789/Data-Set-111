@@ -1,0 +1,32 @@
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score
+features = np.array([
+    [6, 180, 12],
+    [5.92, 190, 11],
+    [5.58, 170, 12],
+    [5.92, 165, 10],
+    [5, 100, 6],
+    [5.5, 150, 8],
+    [5.42, 130, 7],
+    [5.75, 150, 9]
+])
+labels = np.array([0, 0, 0, 0, 1, 1, 1, 1])
+classifier = DecisionTreeClassifier()
+classifier.fit(features, labels)
+
+new_entry = np.array([[6.00, 180, 12]])
+prediction = classifier.predict(new_entry)
+predicted_label = "male" if prediction[0] == 0 else "female"
+print("Prediction for the new entry:", predicted_label)
+
+features = np.vstack([features, new_entry]) 
+labels = np.append(labels, prediction[0])
+
+classifier.fit(features, labels)
+y_pred_updated = classifier.predict(features)
+conf_matrix_updated = confusion_matrix(labels, y_pred_updated)
+accuracy_updated = accuracy_score(labels, y_pred_updated)
+
+print("Updated Confusion Matrix:\n", conf_matrix_updated)
+print("Updated Accuracy Score:", accuracy_updated)
