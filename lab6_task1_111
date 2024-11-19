@@ -1,0 +1,27 @@
+#MAAZ HUSSAIN
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('homeprice.csv')
+print(df.columns)
+plt.xlabel('AREA')
+plt.ylabel('PRICE')
+plt.scatter(df['AREA'], df['PRICE'], color='red', marker='+')
+plt.show()
+new_df = df.drop('PRICE', axis='columns') 
+price = df['PRICE'] 
+reg = LinearRegression()
+reg.fit(new_df, price)
+
+predicted_price = reg.predict([[3300]])
+print(predicted_price)
+
+print("Coefficient (m):", reg.coef_) 
+print("Intercept (b):", reg.intercept_) 
+
+area = 3300 
+m = reg.coef_[0] 
+b = reg.intercept_  
+calculated_price = m * area + b  
+print("Manually calculated price for 3300 sqft:", calculated_price)
