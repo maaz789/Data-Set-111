@@ -1,0 +1,35 @@
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
+df = pd.read_csv('homeprice.csv')
+print("Columns in the dataset:", df.columns)
+
+new_df = df.drop('PRICE', axis='columns') 
+PRICE = df['PRICE'] 
+reg = LinearRegression()
+reg.fit(new_df, PRICE)
+area_5000 = reg.predict([[5000]]) 
+area_6000 = reg.predict([[6000]]) 
+area_9000 = reg.predict([[9000]])  
+print(f"Predicted price for 5000 sqft: ${area_5000[0]:,.2f}")
+print(f"Predicted price for 6000 sqft: ${area_6000[0]:,.2f}")
+print(f"Predicted price for 9000 sqft: ${area_9000[0]:,.2f}")
+
+plt.xlabel('AREA (sqft)')
+plt.ylabel('PRICE ($)')
+plt.scatter(df['AREA'], df['PRICE'], color='red', marker='+', label='Original Data Points')
+
+area_range = np.linspace(df['AREA'].min(), df['AREA'].max(), 100).reshape(-1, 1)
+price_predictions = reg.predict(area_range)
+plt.plot(area_range, price_predictions, color='blue', label='Regression Line')
+plt.scatter([5000, 6000, 9000], [area_5000[0], area_6000[0], area_9000[0]], color='green', marker='o', label='Predicted Points')
+plt.legend()
+plt.show()
+print("\nModel Coefficients and Intercept:")
+print(f"Slope (Coefficient): {reg.coef_[0]:,.2f}") 
+print(f"Intercept (b): {reg.intercept_:,.2f}") 
+AREA = 3300
+m = reg.coef_[0]
+b = reg.intercept_
+calculated_price = m * AREA + b
+print(f"\nManually calculated price for {AREA} sqft using Y = m * X + b: ${calculated_price:,.2f}")
