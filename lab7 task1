@@ -1,0 +1,12 @@
+import pandas as pd
+data = {
+    'Student': ['Alice', 'Bob', 'Charlie', 'David'],
+    'Math': [85, 90, None, 88],
+    'Science': [92, None, 84, 91],
+    'English': [91, None, 90, 85]
+}
+df = pd.DataFrame(data)
+
+df_filled = df.fillna(method='ffill')
+
+print("DataFrame after Forward Fill:\n", df_filled)
