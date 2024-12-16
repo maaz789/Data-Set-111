@@ -1,0 +1,21 @@
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+emails = [
+    ("Free money, click now!", "spam"),
+    ("Important meeting at 3pm", "not spam"),
+    ("Congratulations, you've won!", "spam"),
+    ("Are you available for dinner?", "not spam")
+]
+df_emails = pd.DataFrame(emails, columns=['Email', 'Label'])
+
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(df_emails['Email'])
+y = df_emails['Label']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+dt = DecisionTreeClassifier(random_state=42)
+dt.fit(X_train, y_train)
+
+predictions_dt = dt.predict(X_test)
+print("Email Spam Classification Predictions:", predictions_dt)
