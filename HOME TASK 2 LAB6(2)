@@ -1,0 +1,29 @@
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+from mlxtend.preprocessing import TransactionEncoder
+df = pd.read_csv('Mall_Customers.csv')
+bins_income = [0, 30, 60, 100]
+labels_income = ['Low', 'Medium', 'High']
+df['Income Category'] = pd.cut(df['Annual Income (k$)'], bins=bins_income, labels=labels_income, right=False)
+
+bins_score = [0, 33, 66, 100]
+labels_score = ['Low', 'Medium', 'High']
+df['Spending Category'] = pd.cut(df['Spending Score (1-100)'], bins=bins_score, labels=labels_score, right=False)
+df['Income Category'] = df['Income Category'].cat.add_categories(['Unknown'])
+df['Spending Category'] = df['Spending Category'].cat.add_categories(['Unknown'])
+df['Income Category'] = df['Income Category'].fillna('Unknown')
+df['Spending Category'] = df['Spending Category'].fillna('Unknown')
+
+transactions = df[['Income Category', 'Spending Category']].values.tolist()
+transactions = [[str(item) for item in transaction] for transaction in transactions]
+
+te = TransactionEncoder()
+te_ary = te.fit(transactions).transform(transactions)
+df_transactions = pd.DataFrame(te_ary, columns=te.columns_)
+frequent_itemsets = apriori(df_transactions, min_support=0.2, use_colnames=True)
+rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1.0)
+
+print("Frequent Itemsets:")
+print(frequent_itemsets)
+print("\nAssociation Rules:")
+print(rules)
