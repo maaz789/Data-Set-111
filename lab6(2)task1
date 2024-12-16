@@ -1,0 +1,14 @@
+import pandas as pd
+from sklearn.cluster import KMeans
+df = pd.read_csv("income.csv")
+
+numeric_data = df.drop(columns=["Object"])
+
+kmeans = KMeans(n_clusters=2, random_state=42)
+kmeans.fit(numeric_data)
+
+df["Cluster"] = kmeans.labels_
+
+print("Clustered Data:\n", df)
+centroids = kmeans.cluster_centers_
+print("\nCentroids:\n", centroids)
