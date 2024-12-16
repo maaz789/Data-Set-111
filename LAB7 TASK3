@@ -1,0 +1,18 @@
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+data = {
+    'CreditScore': [650, 700, 500, 600, 800, 750],
+    'Income': [40000, 60000, 30000, 50000, 100000, 90000],
+    'Debt': [5000, 1000, 8000, 6000, 2000, 3000],
+    'Risk': ['Low', 'Low', 'High', 'High', 'Low', 'Low']
+}
+
+df = pd.DataFrame(data)
+X = df[['CreditScore', 'Income', 'Debt']]
+y = df['Risk']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+nb = GaussianNB()
+nb.fit(X_train, y_train)
+predictions_nb = nb.predict(X_test)
+print("Loan Application Risk Predictions:", predictions_nb)
