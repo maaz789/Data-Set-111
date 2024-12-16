@@ -1,0 +1,25 @@
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+import pandas as pd
+data = {
+    'Math': [85, 90, 75, 60, 95],
+    'Science': [92, 80, 88, 65, 93],
+    'English': [88, 91, 78, 70, 85],
+    'Attendance': [90, 95, 70, 60, 85],  # Percentage attendance
+    'PastPerformance': [3.5, 3.8, 2.9, 2.5, 3.9],  # GPA or similar past performance measure
+    'Pass': ['Pass', 'Pass', 'Fail', 'Fail', 'Pass']  # Target: Pass/Fail in course
+}
+
+df = pd.DataFrame(data)
+X = df[['Math', 'Science', 'English', 'Attendance', 'PastPerformance']]
+y = df['Pass']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+knn = KNeighborsClassifier(n_neighbors=3)
+
+knn.fit(X_train, y_train)
+
+predictions = knn.predict(X_test)
+print("Predictions:", predictions)
+print("Model accuracy on test data:", knn.score(X_test, y_test))
