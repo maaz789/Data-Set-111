@@ -1,0 +1,72 @@
+
+def input_chromosomes(num_individuals, num_genes):
+    population = []
+    for i in range(num_individuals):
+        individual = []
+        print(f"Enter values for individual {i + 1} (binary values of length {num_genes}):")
+        while len(individual) < num_genes:
+            try:
+                gene = int(input(f"Enter 0 or 1 for gene {len(individual) + 1}: "))
+                if gene == 0 or gene == 1:
+                    individual.append(gene)
+                else:
+                    print("Please enter a binary value (0 or 1).")
+            except ValueError:
+                print("Invalid input. Please enter 0 or 1.")
+        population.append(individual)
+    return population
+def calFitness(S):
+    fitness = []
+    total = 0
+    for individual in S:
+        fitness_value = individual.count(1) 
+        fitness.append(fitness_value)
+        total += fitness_value
+    print("Fitness Values:", fitness)
+    print("Total Fitness:", total)
+    return fitness
+def selection(S, fitness):
+    selected = []
+    for i in range(len(S) // 2):  
+        a, b = random.sample(range(len(S)), 2)
+        selected.append(S[a] if fitness[a] > fitness[b] else S[b])
+    return selected
+def crossover(selected):
+    crossover_point = 4
+    selected[1][:crossover_point], selected[2][:crossover_point] = selected[2][:crossover_point], selected[1][:crossover_point]
+    return selected
+def mutation(S, mutation_rate=0.1):
+    for individual in S:
+        for i in range(len(individual)):
+            if random.random() < mutation_rate:
+                individual[i] = 1 - individual[i]  
+    return S
+def isOptimal(S):
+    for individual in S:
+        if individual.count(1) == len(individual):  
+            return True
+    return False
+def genetic_algorithm(S, generations=100):
+    for generation in range(generations):
+        print(f"\nGeneration {generation + 1}:")
+        fitness = calFitness(S)
+        if isOptimal(S):
+            print("Optimal solution found!")
+            break
+        selected = selection(S, fitness)
+        selected = crossover(selected)
+        selected = mutation(selected)
+        S = selected
+        for individual in S:
+            print(individual)
+num_individuals = int(input("Enter number of individuals in the population: "))
+num_genes = int(input("Enter the number of genes in each chromosome: "))
+S = input_chromosomes(num_individuals, num_genes)
+genetic_algorithm(S)
+# Modified crossover function
+def crossover_modified(S):
+    # Crossover between S2 and S3 after 4th point
+    crossover_point = 4
+    S[1][:crossover_point], S[2][:crossover_point] = S[2][:crossover_point], S[1][:crossover_point]
+    
+    return S
