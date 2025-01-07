@@ -1,0 +1,110 @@
+# maaz hussain
+PLAYER_X = 'X'  
+PLAYER_O = 'O' 
+def isTerminal(board):
+    if checkWin(board, PLAYER_X):
+        return True
+    if checkWin(board, PLAYER_O):
+        return True
+    if not any(cell == ' ' for row in board for cell in row):
+        return True
+    return False
+
+def checkWin(board, player):
+
+    for row in range(3):
+        if all(board[row][col] == player for col in range(3)):
+            return True
+    for col in range(3):
+        if all(board[row][col] == player for row in range(3)):
+            return True
+    if all(board[i][i] == player for i in range(3)): 
+        return True
+    if all(board[i][2 - i] == player for i in range(3)): 
+        return True
+    return False
+def evaluate(board, depth):
+    if checkWin(board, PLAYER_X): 
+        return 10 - depth
+    elif checkWin(board, PLAYER_O): 
+        return -10 + depth 
+    return 0 
+
+def getPossibleMoves(board):
+    moves = []
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == ' ':
+                moves.append((row, col))
+    return moves
+
+def makeMove(board, move, player):
+    newBoard = [row[:] for row in board] 
+    newBoard[move[0]][move[1]] = player
+    return newBoard
+
+def minimax(board, depth, isMaximizingPlayer):
+    if isTerminal(board):  
+        return evaluate(board, depth)
+
+    if isMaximizingPlayer: 
+        bestVal = -float('inf') 
+        for move in getPossibleMoves(board):
+            newBoard = makeMove(board, move, PLAYER_X)
+            bestVal = max(bestVal, minimax(newBoard, depth + 1, False))  
+        return bestVal
+    else:
+        bestVal = float('inf') 
+        for move in getPossibleMoves(board):
+            newBoard = makeMove(board, move, PLAYER_O)
+            bestVal = min(bestVal, minimax(newBoard, depth + 1, True))
+        return bestVal
+def findBestMove(board):
+    bestMove = None
+    bestVal = -float('inf') 
+
+    for move in getPossibleMoves(board):
+        newBoard = makeMove(board, move, PLAYER_X)
+        moveVal = minimax(newBoard, 0, False) 
+
+        if moveVal > bestVal:
+            bestMove = move
+            bestVal = moveVal
+
+    return bestMove
+
+def printBoard(board):
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+def playTicTacToe():
+    board = [[' ' for _ in range(3)] for _ in range(3)]
+    print("Welcome to Tic-Tac-Toe!")
+    printBoard(board)
+
+    while True:
+        print("\nAI's turn (X):")
+        bestMove = findBestMove(board)
+        board = makeMove(board, bestMove, PLAYER_X)
+        printBoard(board)
+        if checkWin(board, PLAYER_X):
+            print("AI wins!")
+            break
+        if isTerminal(board):
+            print("It's a draw!")
+            break
+
+        print("\nOpponent's turn (O):")
+        moves = getPossibleMoves(board)
+        move = moves[0] 
+        board = makeMove(board, move, PLAYER_O)
+        printBoard(board)
+        if checkWin(board, PLAYER_O):
+            print("Opponent wins!")
+            break
+        if isTerminal(board):
+            print("It's a draw!")
+            break
+if __name__ == "__main__":
+    playTicTacToe()
