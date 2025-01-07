@@ -1,0 +1,28 @@
+def input_chromosomes(num_individuals, num_genes):
+    population = []
+    for i in range(num_individuals):
+        individual = []
+        print(f"Enter values for individual {i + 1} (binary values of length {num_genes}):")
+        while len(individual) < num_genes:
+            try:
+                gene = int(input(f"Enter 0 or 1 for gene {len(individual) + 1}: "))
+                if gene == 0 or gene == 1:
+                    individual.append(gene)
+                else:
+                    print("Please enter a binary value (0 or 1).")
+            except ValueError:
+                print("Invalid input. Please enter 0 or 1.")
+        population.append(individual)
+    return population
+def genetic_algorithm(S, generations=10):
+    for generation in range(generations):
+        print(f"\nGeneration {generation + 1}:")
+        fitness = calFitness(S)
+        S = crossover(S)
+        S = mutation(S)
+        for individual in S:
+            print(individual)
+num_individuals = int(input("Enter number of individuals in the population: "))
+num_genes = int(input("Enter the number of genes in each chromosome: "))
+S = input_chromosomes(num_individuals, num_genes)
+genetic_algorithm(S)
